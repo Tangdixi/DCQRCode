@@ -1,0 +1,10 @@
+PODS:
+  - DCQRCode (1.0)
+
+DEPENDENCIES:
+  - DCQRCode (~> 1.0)
+
+SPEC CHECKSUMS:
+  DCQRCode: 22c6ccc453edf5fd52c2a930c09034969edbcccd
+
+COCOAPODS: 0.35.0

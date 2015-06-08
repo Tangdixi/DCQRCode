@@ -1,0 +1,1 @@
+../../../DCQRCode/DCQRCode/DCQRCodeScanner.h

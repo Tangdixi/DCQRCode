@@ -1,0 +1,1 @@
+../../../DCQRCode/DCQRCode/DCQRCodeGenerator.h
