@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--DCQRCode-->
@@ -84,6 +85,156 @@
             </objects>
             <point key="canvasLocation" x="2210" y="340"/>
         </scene>
+        <!--Page View Controller-->
+        <scene sceneID="FA4-sJ-Vk9">
+            <objects>
+                <viewController storyboardIdentifier="pageViewController" automaticallyAdjustsScrollViewInsets="NO" id="WLe-6C-hI3" customClass="PageViewController" customModule="Example_DCQRCode_" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BqO-gh-5kf"/>
+                        <viewControllerLayoutGuide type="bottom" id="hLb-PE-4dM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JlE-db-58X">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6vC-Nv-S9q">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bh2-Yj-QVJ" userLabel="Content View">
+                                        <rect key="frame" x="0.0" y="0.0" width="1800" height="600"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FlH-48-Esl" userLabel="View B">
+                                                <rect key="frame" x="600" y="0.0" width="600" height="600"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Toast" translatesAutoresizingMaskIntoConstraints="NO" id="KK4-k0-afj">
+                                                        <rect key="frame" x="150" y="120" width="300" height="300"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="300" id="gnD-Qc-hO3"/>
+                                                            <constraint firstAttribute="width" constant="300" id="gux-oC-n6A"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v96-3C-BM5">
+                                                        <rect key="frame" x="212" y="193" width="176" height="176"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="176" id="iri-8Q-oN7"/>
+                                                            <constraint firstAttribute="width" constant="176" id="wL9-9m-Kok"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="KK4-k0-afj" firstAttribute="centerX" secondItem="FlH-48-Esl" secondAttribute="centerX" id="ArK-Tx-ahU"/>
+                                                    <constraint firstItem="v96-3C-BM5" firstAttribute="top" secondItem="KK4-k0-afj" secondAttribute="top" constant="73" id="OHg-Zv-Eb2"/>
+                                                    <constraint firstItem="KK4-k0-afj" firstAttribute="top" secondItem="FlH-48-Esl" secondAttribute="top" constant="120" id="SVy-8k-bNk"/>
+                                                    <constraint firstItem="v96-3C-BM5" firstAttribute="centerX" secondItem="KK4-k0-afj" secondAttribute="centerX" id="UK6-7S-e6A"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cuh-Qp-Kqx" userLabel="View A">
+                                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background_1" translatesAutoresizingMaskIntoConstraints="NO" id="3xV-bg-At6">
+                                                        <rect key="frame" x="150" y="120" width="300" height="300"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="300" id="4bT-hJ-FQa"/>
+                                                            <constraint firstAttribute="width" constant="300" id="VHX-cu-yFf"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4aY-be-Jdo">
+                                                        <rect key="frame" x="211" y="168" width="180" height="180"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="180" id="pmy-Ff-H5H"/>
+                                                            <constraint firstAttribute="width" constant="180" id="qwl-Hg-f4X"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="3xV-bg-At6" firstAttribute="centerX" secondItem="Cuh-Qp-Kqx" secondAttribute="centerX" id="Aik-xQ-0Ni"/>
+                                                    <constraint firstItem="4aY-be-Jdo" firstAttribute="top" secondItem="3xV-bg-At6" secondAttribute="top" constant="48" id="Aj4-Jm-1Tm"/>
+                                                    <constraint firstItem="3xV-bg-At6" firstAttribute="top" secondItem="Cuh-Qp-Kqx" secondAttribute="top" constant="120" id="D7n-ov-okn"/>
+                                                    <constraint firstItem="4aY-be-Jdo" firstAttribute="centerX" secondItem="3xV-bg-At6" secondAttribute="centerX" constant="1" id="FOa-JM-ZPX"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nwq-Hp-eOt" userLabel="View C">
+                                                <rect key="frame" x="1200" y="0.0" width="600" height="600"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Cat" translatesAutoresizingMaskIntoConstraints="NO" id="ioe-ql-Xhb">
+                                                        <rect key="frame" x="150" y="120" width="300" height="300"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="300" id="Fgv-yq-9TA"/>
+                                                            <constraint firstAttribute="height" constant="300" id="IZo-bO-tL7"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kN4-8E-gE7">
+                                                        <rect key="frame" x="213" y="171" width="176" height="176"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="176" id="ebn-KH-sed"/>
+                                                            <constraint firstAttribute="height" constant="176" id="vvT-zd-UXw"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="kN4-8E-gE7" firstAttribute="centerX" secondItem="ioe-ql-Xhb" secondAttribute="centerX" constant="1" id="KTw-yY-E4W"/>
+                                                    <constraint firstItem="kN4-8E-gE7" firstAttribute="top" secondItem="ioe-ql-Xhb" secondAttribute="top" constant="51" id="PXR-vM-ciK"/>
+                                                    <constraint firstItem="ioe-ql-Xhb" firstAttribute="top" secondItem="Nwq-Hp-eOt" secondAttribute="top" constant="120" id="uBZ-y2-qHV"/>
+                                                    <constraint firstItem="ioe-ql-Xhb" firstAttribute="centerX" secondItem="Nwq-Hp-eOt" secondAttribute="centerX" id="vdy-Oa-lgF"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Cuh-Qp-Kqx" firstAttribute="top" secondItem="Bh2-Yj-QVJ" secondAttribute="top" id="4nG-sO-342"/>
+                                            <constraint firstItem="Nwq-Hp-eOt" firstAttribute="leading" secondItem="FlH-48-Esl" secondAttribute="trailing" id="Ezu-hi-f9b"/>
+                                            <constraint firstAttribute="bottom" secondItem="Cuh-Qp-Kqx" secondAttribute="bottom" id="Hlc-8T-rxG"/>
+                                            <constraint firstAttribute="bottom" secondItem="FlH-48-Esl" secondAttribute="bottom" id="JyU-8w-3xS"/>
+                                            <constraint firstItem="Nwq-Hp-eOt" firstAttribute="top" secondItem="Bh2-Yj-QVJ" secondAttribute="top" id="KOm-qe-ofu"/>
+                                            <constraint firstAttribute="width" constant="600" id="Tei-eT-qGV"/>
+                                            <constraint firstItem="Cuh-Qp-Kqx" firstAttribute="leading" secondItem="Bh2-Yj-QVJ" secondAttribute="leading" id="VAX-IS-Tha"/>
+                                            <constraint firstItem="FlH-48-Esl" firstAttribute="top" secondItem="Bh2-Yj-QVJ" secondAttribute="top" id="gZG-aN-itm"/>
+                                            <constraint firstAttribute="bottom" secondItem="Nwq-Hp-eOt" secondAttribute="bottom" id="h6L-LZ-znd"/>
+                                            <constraint firstItem="FlH-48-Esl" firstAttribute="leading" secondItem="Bh2-Yj-QVJ" secondAttribute="leading" id="l7a-gQ-4jM"/>
+                                            <constraint firstItem="FlH-48-Esl" firstAttribute="leading" secondItem="Cuh-Qp-Kqx" secondAttribute="trailing" id="pUx-6P-3Dc"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Tei-eT-qGV"/>
+                                                <exclude reference="l7a-gQ-4jM"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Bh2-Yj-QVJ" firstAttribute="top" secondItem="6vC-Nv-S9q" secondAttribute="top" id="DHK-Or-8kW"/>
+                                    <constraint firstAttribute="bottom" secondItem="Bh2-Yj-QVJ" secondAttribute="bottom" id="PWf-Sk-yt0"/>
+                                    <constraint firstAttribute="trailing" secondItem="Bh2-Yj-QVJ" secondAttribute="trailing" id="eeB-ag-FRM"/>
+                                    <constraint firstItem="Bh2-Yj-QVJ" firstAttribute="leading" secondItem="6vC-Nv-S9q" secondAttribute="leading" id="qwL-H4-1SV"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6vC-Nv-S9q" firstAttribute="top" secondItem="JlE-db-58X" secondAttribute="top" id="MV8-ee-if4"/>
+                            <constraint firstItem="Cuh-Qp-Kqx" firstAttribute="width" secondItem="JlE-db-58X" secondAttribute="width" id="TD3-Mq-lqX"/>
+                            <constraint firstItem="Bh2-Yj-QVJ" firstAttribute="height" secondItem="JlE-db-58X" secondAttribute="height" id="TKl-0o-T2E"/>
+                            <constraint firstItem="FlH-48-Esl" firstAttribute="width" secondItem="JlE-db-58X" secondAttribute="width" id="axr-S3-PKr"/>
+                            <constraint firstItem="Nwq-Hp-eOt" firstAttribute="width" secondItem="JlE-db-58X" secondAttribute="width" id="b57-tv-ey9"/>
+                            <constraint firstAttribute="trailing" secondItem="6vC-Nv-S9q" secondAttribute="trailing" id="fVM-Jt-PHZ"/>
+                            <constraint firstItem="Bh2-Yj-QVJ" firstAttribute="width" secondItem="JlE-db-58X" secondAttribute="width" multiplier="3:1" id="ufD-PG-fXj"/>
+                            <constraint firstItem="hLb-PE-4dM" firstAttribute="top" secondItem="6vC-Nv-S9q" secondAttribute="bottom" id="ukX-1Q-vaU"/>
+                            <constraint firstItem="6vC-Nv-S9q" firstAttribute="leading" secondItem="JlE-db-58X" secondAttribute="leading" id="xyn-kx-LtU"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="catQRCodeImageView" destination="kN4-8E-gE7" id="BHo-6e-I8w"/>
+                        <outlet property="frameQRCodeImageView" destination="4aY-be-Jdo" id="ZWc-eF-MTq"/>
+                        <outlet property="toastQRCodeImageView" destination="v96-3C-BM5" id="Eox-V1-RJJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yVs-Em-qm1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2941" y="339"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="cdi-UE-gkJ">
             <objects>
@@ -103,4 +254,9 @@
             <point key="canvasLocation" x="507" y="-402"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Background_1" width="240" height="240"/>
+        <image name="Cat" width="960" height="960"/>
+        <image name="Toast" width="200" height="196"/>
+    </resources>
 </document>

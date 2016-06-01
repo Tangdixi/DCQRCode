@@ -8,7 +8,7 @@
 
 import UIKit
 
-let dataSource = ["Default", "Outer Position Color", "Inner Position Color", "Outer Position Image", "Inner Position Color", "Center Image", "Bottom Color", "Top Color", "Top Image"]
+let dataSource = ["Default", "Outer Position Color", "Inner Position Color", "Outer Position Image", "Inner Position Color", "Center Image", "Bottom Color", "Top Color", "Top Image", "Examples"]
 
 class ViewController: UIViewController {
 
@@ -94,6 +94,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     
+    /* Enter Example */
+    if indexPath.row == dataSource.count - 1 {
+      
+      guard let controller = self.storyboard?.instantiateViewControllerWithIdentifier("pageViewController") else { fatalError() }
+      self.navigationController?.pushViewController(controller, animated: true)
+      
+      return
+    }
+    
     guard let controller = self.storyboard?.instantiateViewControllerWithIdentifier("qrcodeViewController") as? QRCodeViewController else { fatalError() }
     
     controller.qrcode = self.qrcodeConfiguration(indexPath)
@@ -107,7 +116,5 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     return UIView(frame: CGRectZero)
     
   }
-  
-  
   
 }

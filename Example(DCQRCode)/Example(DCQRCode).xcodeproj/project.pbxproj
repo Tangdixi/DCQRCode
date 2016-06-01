@@ -15,6 +15,7 @@
 		817DA9A31CFC0CE0009015EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 817DA9A11CFC0CE0009015EA /* Main.storyboard */; };
 		817DA9A51CFC0CE0009015EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 817DA9A41CFC0CE0009015EA /* Assets.xcassets */; };
 		817DA9A81CFC0CE0009015EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 817DA9A61CFC0CE0009015EA /* LaunchScreen.storyboard */; };
+		81E4B3771CFF4159004D4F67 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4B3761CFF4159004D4F67 /* PageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		817DA9A41CFC0CE0009015EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		817DA9A71CFC0CE0009015EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		817DA9A91CFC0CE0009015EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81E4B3761CFF4159004D4F67 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 				817DA99D1CFC0CE0009015EA /* AppDelegate.swift */,
 				817DA99F1CFC0CE0009015EA /* ViewController.swift */,
 				817A5F851CFD760A00A258AE /* QRCodeViewController.swift */,
+				81E4B3761CFF4159004D4F67 /* PageViewController.swift */,
 				817DA9A11CFC0CE0009015EA /* Main.storyboard */,
 				817DA9A41CFC0CE0009015EA /* Assets.xcassets */,
 				817DA9A61CFC0CE0009015EA /* LaunchScreen.storyboard */,
@@ -155,6 +158,7 @@
 				817A5F861CFD760A00A258AE /* QRCodeViewController.swift in Sources */,
 				817DA9A01CFC0CE0009015EA /* ViewController.swift in Sources */,
 				817A5F8C1CFD784400A258AE /* DCQRCode.swift in Sources */,
+				81E4B3771CFF4159004D4F67 /* PageViewController.swift in Sources */,
 				817A5F8D1CFD784400A258AE /* FunctionalCoreImage.swift in Sources */,
 				817DA99E1CFC0CE0009015EA /* AppDelegate.swift in Sources */,
 			);

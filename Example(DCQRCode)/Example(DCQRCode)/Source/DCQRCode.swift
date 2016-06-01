@@ -274,13 +274,13 @@ enum DCQRCodePosition {
       case .TopRight:
         
         let offset = size.width - tileWidth - leftMargin*2
-        rect = CGRectOffset(rect, 0, offset)
+        rect = CGRectOffset(rect, offset, 0)
         return rect
       
       case .BottomLeft:
         
         let offset = size.width - tileWidth - leftMargin*2
-        rect = CGRectOffset(rect, offset, 0)
+        rect = CGRectOffset(rect, 0, offset)
         return rect
       
       case .Center:
