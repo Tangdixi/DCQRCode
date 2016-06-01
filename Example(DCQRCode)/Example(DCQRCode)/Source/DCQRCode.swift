@@ -17,16 +17,18 @@ final class DCQRCode {
   private var info:String
   private var size:CGSize
   
+  /* Temporarily disable these two property */
+  private var bottomImage:UIImage?
+  private var quietZoneColor:UIColor = UIColor.whiteColor()
+  
   var bottomColor = UIColor.whiteColor()
   var topColor = UIColor.blackColor()
-  var bottomImage:UIImage?
   var topImage:UIImage?
-  var quietZoneColor:UIColor = UIColor.whiteColor()
   
   var positionInnerColor:UIColor?
   var positionOuterColor:UIColor?
   var positionInnerStyle:[(UIImage, DCQRCodePosition)]?
-  var positionOuterStyle:[(UIImage, DCQRCodePosition)]?
+  var positionStyle:[(UIImage, DCQRCodePosition)]?
   
   var centerImage:UIImage?
   
@@ -35,7 +37,10 @@ final class DCQRCode {
     self.size = size.scale(UIScreen.mainScreen().scale)
   }
   
-  func generateQRCode() -> UIImage {
+  /*
+   
+   */
+  func image() -> UIImage {
     
     /* Start from a white blank image */
     let originImage = CIImage.emptyImage()
@@ -67,8 +72,6 @@ final class DCQRCode {
     let ciImage = filter(originImage)
     var image = UIImage(CIImage: ciImage)
     
-    /* Use Core Graphics to attach stuffs */
-    
     UIGraphicsBeginImageContextWithOptions(image.size, false, 0)
     image.drawInRect(CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
 
@@ -78,29 +81,7 @@ final class DCQRCode {
       
     }
     
-    if let positionOuterStyle = self.positionOuterStyle {
-      
-      self.clearOuterPosition(positionOuterStyle)
-      
-      positionOuterStyle.forEach {
-        changeInnerPositionStyle($0, position: $1)
-      }
-      image = UIGraphicsGetImageFromCurrentImageContext()
-      
-    }
-    
-    if let positionInnerStyle = self.positionInnerStyle {
-      
-      self.clearInnerPosition(positionInnerStyle)
-      
-      positionInnerStyle.forEach {
-        changePositionInnerColor($0, position: $1)
-      }
-      image = UIGraphicsGetImageFromCurrentImageContext()
-      
-    }
-    
-    if let positionOuterColor = self.positionOuterColor where self.positionOuterStyle == nil {
+    if let positionOuterColor = self.positionOuterColor where self.positionStyle == nil {
       
       changeOuterPositionColor(positionOuterColor, position: .BottomLeft)
       changeOuterPositionColor(positionOuterColor, position: .TopLeft)
@@ -126,6 +107,28 @@ final class DCQRCode {
       
     }
     
+    if let positionStyle = self.positionStyle {
+      
+      self.clearOuterPosition(positionStyle)
+      
+      positionStyle.forEach {
+        changeOuterPositionStyle($0, position: $1)
+      }
+      image = UIGraphicsGetImageFromCurrentImageContext()
+      
+    }
+    
+    if let positionInnerStyle = self.positionInnerStyle {
+      
+      self.clearInnerPosition(positionInnerStyle)
+      
+      positionInnerStyle.forEach {
+        changePositionInnerColor($0, position: $1)
+      }
+      image = UIGraphicsGetImageFromCurrentImageContext()
+      
+    }
+    
     if let centerImage = self.centerImage {
       
       changePositionInnerColor(centerImage, position: .Center)
@@ -136,9 +139,9 @@ final class DCQRCode {
     
     /* Make sure the QRCode's quiet zone clear */
     
-    if self.bottomImage != nil || self.bottomColor != UIColor.whiteColor() {
+    if self.bottomColor != UIColor.whiteColor() {
       
-      changeOuterPositionColor(self.quietZoneColor, position: .QuietZone)
+      changeOuterPositionColor(self.bottomColor, position: .QuietZone)
       
       image = UIGraphicsGetImageFromCurrentImageContext()
       
@@ -192,7 +195,7 @@ extension DCQRCode {
     
   }
   
-  private func changeInnerPositionStyle(image:UIImage, position:DCQRCodePosition) {
+  private func changeOuterPositionStyle(image:UIImage, position:DCQRCodePosition) {
     
     let rect = position.outerPositionRect(self.size, version: self.version)
     
@@ -207,11 +210,11 @@ extension DCQRCode {
     
   }
   
-  private func clearOuterPosition(positionOuterStyle:[(UIImage, DCQRCodePosition)]) {
+  private func clearOuterPosition(positionStyle:[(UIImage, DCQRCodePosition)]) {
     
     guard let context = UIGraphicsGetCurrentContext() else { fatalError() }
     
-    positionOuterStyle.forEach {
+    positionStyle.forEach {
       
       let rect = $1.outerPositionRect(self.size, version: self.version)
       
@@ -254,34 +257,39 @@ enum DCQRCodePosition {
   
   func innerPositionRect(size:CGSize, version:Int) -> CGRect {
     
-    /* Caculate the size at first */
-    let originTileCount = CGFloat((version - 1) * 4 + 23)
-    var tileWidth = size.width * DCQRCodePosition.innerPositionTileOriginWidth / originTileCount
+    let leftMargin = size.width * 3 / CGFloat((version - 1) * 4 + 23)
+    let tileWidth = leftMargin
+    let centerImageWith = size.width * 7 / CGFloat((version - 1) * 4 + 23)
     
-    let scaleRatio = size.width / originTileCount
-    let originToEdge = 6.0 * scaleRatio
-    let centerImageLength = 0.2 * size.width
-    
-    tileWidth += UIScreen.mainScreen().scale
+    var rect = CGRect(origin: CGPoint(x: leftMargin, y: leftMargin), size: CGSize(width: leftMargin, height: leftMargin))
+    rect = CGRectIntegral(rect)
+    rect = CGRectInset(rect, -1, -1)
     
     switch self {
       
       case .TopLeft:
-        let point = CGPoint(x: floor(DCQRCodePosition.innerPositionTileOriginWidth * scaleRatio), y: DCQRCodePosition.innerPositionTileOriginWidth * scaleRatio).toFloor()
-        let rect = CGRect(origin: point, size: CGSize(width: tileWidth, height: tileWidth).toCeil())
+        
         return rect
+      
       case .TopRight:
-        let point = CGPoint(x: size.width - originToEdge, y: DCQRCodePosition.innerPositionTileOriginWidth * scaleRatio).toFloor()
-        let rect = CGRect(origin: point, size: CGSize(width: tileWidth, height: tileWidth).toCeil())
+        
+        let offset = size.width - tileWidth - leftMargin*2
+        rect = CGRectOffset(rect, 0, offset)
         return rect
+      
       case .BottomLeft:
-        let point = CGPoint(x: DCQRCodePosition.innerPositionTileOriginWidth * scaleRatio, y: size.width - originToEdge).toFloor()
-        let rect = CGRect(origin: point, size: CGSize(width: tileWidth, height: tileWidth).toCeil())
+        
+        let offset = size.width - tileWidth - leftMargin*2
+        rect = CGRectOffset(rect, offset, 0)
         return rect
+      
       case .Center:
-        let point = CGPoint(x: size.width/2.0 - centerImageLength/2.0, y: size.width/2.0 - centerImageLength/2.0)
-        let rect = CGRect(origin: point, size: CGSize(width: centerImageLength, height: centerImageLength))
+        
+        rect = CGRect(origin: CGPointZero, size: CGSize(width: centerImageWith , height: centerImageWith))
+        let offset = size.width/2 - centerImageWith/2
+        rect = CGRectOffset(rect, offset, offset)
         return rect
+      
       default:
         return CGRectZero
     }
@@ -291,9 +299,13 @@ enum DCQRCodePosition {
   func outerPositionRect(size:CGSize, version:Int) -> CGRect {
     
     let zonePathWidth = size.width / CGFloat((version - 1) * 4 + 23)
-    let outerPositionWidth = zonePathWidth * DCQRCodePosition.outerPositionTileOriginWidth + UIScreen.mainScreen().scale
+    
+    let outerPositionWidth = zonePathWidth * DCQRCodePosition.outerPositionTileOriginWidth
     var rect = CGRect(origin: CGPointMake(zonePathWidth, zonePathWidth), size: CGSize(width: outerPositionWidth, height: outerPositionWidth))
 
+    rect = CGRectIntegral(rect)
+    rect = CGRectInset(rect, -1, -1)
+    
     switch self {
     case .TopLeft:
       
@@ -327,11 +339,15 @@ enum DCQRCodePosition {
     let topLeftPoint = CGPoint(x: zonePathWidth * 1.5, y: zonePathWidth * 1.5)
     var rect = CGRect(origin: topLeftPoint, size: CGSize(width: positionFrameWidth, height: positionFrameWidth))
     
+    /* Make sure the frame will  */
+    rect = CGRectIntegral(rect)
+    rect = CGRectInset(rect, 1, 1)
+    
     switch self {
       case .TopLeft:
         
         let path = rect.rectPath()
-        path.lineWidth = zonePathWidth + UIScreen.mainScreen().scale
+        path.lineWidth = zonePathWidth + 3
         path.lineCapStyle = .Square
         
         return path
@@ -341,7 +357,7 @@ enum DCQRCodePosition {
         let offset = size.width - positionFrameWidth - topLeftPoint.x * 2
         rect = CGRectOffset(rect, offset, 0)
         let path = rect.rectPath()
-        path.lineWidth = zonePathWidth + UIScreen.mainScreen().scale
+        path.lineWidth = zonePathWidth + 3
         path.lineCapStyle = .Square
         
         return path
@@ -350,7 +366,7 @@ enum DCQRCodePosition {
         let offset = size.width - positionFrameWidth - topLeftPoint.x * 2
         rect = CGRectOffset(rect, 0, offset)
         let path = rect.rectPath()
-        path.lineWidth = zonePathWidth + UIScreen.mainScreen().scale
+        path.lineWidth = zonePathWidth + 3
         path.lineCapStyle = .Square
         
         return path
@@ -374,37 +390,11 @@ enum DCQRCodePosition {
 
 //MARK: Some Convenience Caculation Extension -
 
-extension CGPoint {
-  
-  func toFloor() -> CGPoint {
-    
-    return CGPoint(x: floor(self.x), y: floor(self.y))
-    
-  }
-  func toCeil() -> CGPoint {
-    
-    return CGPoint(x: ceil(self.x), y: ceil(self.y))
-    
-  }
-  
-}
-
 extension CGSize {
   
   func scale(ratio: CGFloat) -> CGSize {
     
     return CGSize(width: self.width * ratio, height: self.height * ratio)
-    
-  }
-  
-  func toFloor() -> CGSize {
-    
-    return CGSize(width: floor(self.width), height: floor(self.height))
-    
-  }
-  func toCeil() -> CGSize {
-    
-    return CGSize(width: ceil(self.width), height: ceil(self.height))
     
   }
   
@@ -425,7 +415,6 @@ extension CGRect {
     return path
     
   }
-  
   
 }
 
