@@ -1,8 +1,8 @@
 #DCQRCode
 
-![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/ReadMe's/ColorFrame.png)
-![Cat](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/ReadMe's/Cat.png)
-![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/ReadMe's/Frame.png)
+![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/ColorFrame.png)
+![Cat](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/Cat.png)
+![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/Frame.png)
 
 **DCQRCode** is a QRCode generate library implement by [*CoreImage*](https://developer.apple.com/library/ios/documentation/GraphicsImaging/Conceptual/CoreImaging/ci_intro/ci_intro.html) and [*CoreGraphics*](https://developer.apple.com/library/ios/documentation/CoreGraphics/Reference/CoreGraphics_Framework/). **DCQRCode** allow you to change the QRCode's *color* or *Position Style*, etc. The inspirarion come from the QRCode feature in [WeChat](http://www.wechat.com/en/).  
 
