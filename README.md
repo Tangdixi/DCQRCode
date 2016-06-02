@@ -1,5 +1,7 @@
 #DCQRCode
 
+[![Build Status](https://travis-ci.org/Tangdixi/DCQRCode.svg?branch=2.0)](https://travis-ci.org/Tangdixi/DCQRCode)
+
 ![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/ColorFrame.png)
 ![Cat](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/Cat.png)
 ![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/Frame.png)
