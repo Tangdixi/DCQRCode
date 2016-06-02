@@ -45,6 +45,7 @@ extension ViewController {
         (UIImage(named: "OuterPosition")!, DCQRCodePosition.TopLeft),
         (UIImage(named: "OuterPosition")!, DCQRCodePosition.BottomLeft)
       ]
+      qrcode.color = UIColor.init(red: 100/255, green: 145/255, blue: 193/255, alpha: 1)
       return qrcode
     case 4:
       
@@ -60,13 +61,13 @@ extension ViewController {
       qrcode.centerImage = UIImage(named: "Avatar")
       return qrcode
     case 6:
-      qrcode.bottomColor = UIColor.yellowColor()
+      qrcode.backgroundColor = UIColor.yellowColor()
       return qrcode
     case 7:
-      qrcode.topColor = UIColor.brownColor()
+      qrcode.color = UIColor.brownColor()
       return qrcode
     case 8:
-      qrcode.topImage = UIImage(named: "Top")
+      qrcode.maskImage = UIImage(named: "Top")
       return qrcode
     default:
       return qrcode

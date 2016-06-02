@@ -21,37 +21,79 @@ final class DCQRCode {
   private var bottomImage:UIImage?
   private var quietZoneColor:UIColor = UIColor.whiteColor()
   
-  var bottomColor = UIColor.whiteColor()
-  var topColor = UIColor.blackColor()
-  var topImage:UIImage?
+  /**
+    Remove the QRCode Quiet Zone, default is __false__
+   */
+  var removeQuietZone = false
   
+  /**
+    The QRCode's background color, default is __White__
+   */
+  var backgroundColor = UIColor.whiteColor()
+  
+  /**
+    The main color of QRCode, default is __Black__
+   */
+  var color = UIColor.blackColor()
+  
+  /**
+    Blend an image into the QRCode. The image will scale and fill the QRCode
+   */
+  var maskImage:UIImage?
+  
+  /**
+    There are three position inner frame in QRCode, locate in __TopLeft__, __TopRight__ and __BottomLeft__.
+    If you only want one frame's color changed, use __*positionInnerStyle*__ instead
+   */
   var positionInnerColor:UIColor?
+  
+  /**
+    There are three position frame in QRCode, locate in __TopLeft__, __TopRight__ and __BottomLeft__.
+    If you only want one frame's color changed, use __*positionStyle*__ instead
+   */
   var positionOuterColor:UIColor?
+  
+  /**
+    Use serveral images to custom your QRCode's Position Inner Frame, the image will auto fill to fit the position frame.
+   */
   var positionInnerStyle:[(UIImage, DCQRCodePosition)]?
+  
+  /**
+    Use serveral images to custom your QRCode's Position Frame, the image will auto fill to fit the position frame.
+   */
   var positionStyle:[(UIImage, DCQRCodePosition)]?
   
+  /**
+    Attach an image in the center of a QRCode
+   */
   var centerImage:UIImage?
   
+  /**
+    Create a DCQRCode object with the specify __info__ and __size__. The size will auto scale in a Retina screen to avoid blurry. 
+    @param info A String that you want to store in QRCode
+    @param size The QRCode image's size
+   */
   init(info:String, size:CGSize) {
     self.info = info
     self.size = size.scale(UIScreen.mainScreen().scale)
   }
   
-  /*
-   
+  /**
+    Output the QRCode image
+    @return An UIImage object
    */
   func image() -> UIImage {
     
     /* Start from a white blank image */
     let originImage = CIImage.emptyImage()
-    var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(topColor, color1: bottomColor)
+    var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(color, color1: backgroundColor)
     
     /* Processing through Core Image */
-    if let topImage = self.topImage {
+    if let maskImage = self.maskImage {
       
-      guard let ciTopImage = CIImage(image: topImage) else { fatalError() }
-      let topImageResizeFilter = resizeFilter(self.size)
-      let resizeTopImage = topImageResizeFilter(ciTopImage)
+      guard let ciTopImage = CIImage(image: maskImage) else { fatalError() }
+      let maskImageResizeFilter = resizeFilter(self.size)
+      let resizeTopImage = maskImageResizeFilter(ciTopImage)
       let alphaQRCode = generateAlphaQRCode()
       
       filter = filter >>> blendWithAlphaMaskFilter(resizeTopImage, maskImage: alphaQRCode)
@@ -78,6 +120,14 @@ final class DCQRCode {
     defer {
       
       UIGraphicsEndImageContext()
+      
+    }
+    
+    if let centerImage = self.centerImage {
+      
+      changePositionInnerColor(centerImage, position: .Center)
+      
+      image = UIGraphicsGetImageFromCurrentImageContext()
       
     }
     
@@ -129,21 +179,23 @@ final class DCQRCode {
       
     }
     
-    if let centerImage = self.centerImage {
+    /* Make sure the QRCode's quiet zone clear */
+    
+    if self.backgroundColor != UIColor.whiteColor() {
       
-      changePositionInnerColor(centerImage, position: .Center)
+      changeOuterPositionColor(self.backgroundColor, position: .QuietZone)
       
       image = UIGraphicsGetImageFromCurrentImageContext()
       
     }
     
-    /* Make sure the QRCode's quiet zone clear */
-    
-    if self.bottomColor != UIColor.whiteColor() {
+    if self.removeQuietZone == true {
       
-      changeOuterPositionColor(self.bottomColor, position: .QuietZone)
+      let quietZoneWidth = self.size.width / CGFloat((version - 1) * 4 + 23)
+      var rect = CGRect(origin: CGPointZero, size: self.size)
+      rect = CGRectInset(rect, quietZoneWidth, quietZoneWidth)
       
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = image.cropByRect(rect)
       
     }
     
@@ -162,8 +214,6 @@ extension DCQRCode {
     let originImage = CIImage.emptyImage()
     let filter = generateQRCodeFilter(self.info)
     let width = Int(filter(originImage).extent.width)
-    
-    print("Version:\((width - 23)/4 + 1)")
     
     return (width - 23)/4 + 1
     
@@ -418,5 +468,17 @@ extension CGRect {
   
 }
 
+extension UIImage {
+  
+  func cropByRect(rect:CGRect) -> UIImage {
+    
+    let scaleRect = CGRectMake(rect.origin.x * self.scale, rect.origin.x * self.scale, rect.size.width * self.scale, rect.size.height * self.scale)
+    guard let imageRef = CGImageCreateWithImageInRect(self.CGImage, scaleRect) else { fatalError() }
+    let image = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+    
+    return image
+  }
+  
+}
 
 
