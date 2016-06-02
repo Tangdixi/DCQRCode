@@ -18,7 +18,12 @@ git clone git@github.com:Tangdixi/DCPathButton.git
 ##Installation
 
 Drag the **Source** into your project.  
-Well, it is strongly recommended that you install via [**CocoaPods**](https://cocoapods.org) or [**Carthage**](https://github.com/Carthage/Carthage).
+Well, it is strongly recommended that you install via [**CocoaPods**](https://cocoapods.org) 
+
+###CocoaPods
+```bash
+pod 'DCQRCode', '~> 2.0'
+```
 
 ##Usage
 1. Create a DCQRCode  
