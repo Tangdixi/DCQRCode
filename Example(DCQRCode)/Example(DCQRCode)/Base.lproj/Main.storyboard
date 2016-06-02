@@ -64,7 +64,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RRb-pk-lP7">
-                                <rect key="frame" x="150" y="109" width="300" height="300"/>
+                                <rect key="frame" x="150" y="61" width="300" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="A7g-iB-P0m"/>
                                     <constraint firstAttribute="height" constant="300" id="BOz-fk-lax"/>
@@ -73,7 +73,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="RRb-pk-lP7" firstAttribute="top" secondItem="EFF-yH-cwh" secondAttribute="bottom" constant="89" id="0mD-T9-6Tn"/>
+                            <constraint firstItem="RRb-pk-lP7" firstAttribute="top" secondItem="EFF-yH-cwh" secondAttribute="bottom" constant="41" id="0mD-T9-6Tn"/>
                             <constraint firstItem="RRb-pk-lP7" firstAttribute="centerX" secondItem="Qgp-5W-A4m" secondAttribute="centerX" id="PV9-5F-KQg"/>
                         </constraints>
                     </view>

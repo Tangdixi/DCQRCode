@@ -1,0 +1,17 @@
+language: objective-c
+xcode_project: Example.xcodeproj
+xcode_scheme: Example
+
+script:
+  xctool
+  -scheme Example(DCQRCode)
+  -sdk iphonesimulator
+  -destination 'platform=iOS Simulator,name=iPhone 6 Plus'
+  build 
+  ONLY_ACTIVE_ARCH=NO
+  CODE_SIGN_IDENTITY=""
+  CODE_SIGNING_REQUIRED=NO
+
+before_install:
+  - brew update
+  - brew uninstall xctool && brew install --HEAD xctool
