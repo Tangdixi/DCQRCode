@@ -26,16 +26,16 @@ pod 'DCQRCode', '~> 2.0'
 ```
 
 ##Usage
-1. Create a DCQRCode  
+* Create a DCQRCode  
 ```swift
 let qrcode = DCQRCode(info: "https://github.com/Tangdixi/DCQRCode", size: CGSize(width: 300, height: 300))
 ```
-2. Configure the qrcode
+* Configure the qrcode
 ```swift
 qrcode.backgroundColor = UIColor.yellowColor()
 qrcode.color = UIColor.brownColor()
 ```
-3. Output the qrcode image 
+* Output the qrcode image 
 ```Swift
 let qrcodeImage = qrcode.image()
 ```  
