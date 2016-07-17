@@ -43,8 +43,7 @@ let qrcodeImage = qrcode.image()
 More detail just head to the **Example Project**
 
 ##Documentation
-**Documentation** is added into the source file.  
-You can use `option` and click the keyword in **Xcode**   
+Support **quicklook** in **Xcode**  
 
 ##Bug, Suggestions
 
