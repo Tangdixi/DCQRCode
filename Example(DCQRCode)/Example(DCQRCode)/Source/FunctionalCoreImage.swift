@@ -42,7 +42,7 @@ func cropFilter(cropRect:CGRect) -> Filter {
 
 func bitmapResizeFilter(desireSize:CGSize) -> Filter {
   return { image in
-    
+	
      let extent = CGRectIntegral(image.extent)
      let scale = min(desireSize.width/CGRectGetWidth(extent), desireSize.height/CGRectGetHeight(extent))
      
