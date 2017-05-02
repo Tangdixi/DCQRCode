@@ -12,7 +12,12 @@ import UIKit
 
 typealias Filter = ((CIImage) -> CIImage)
 
-infix operator >>> { associativity left }
+infix operator >>> : DCQRCodePrecedence
+precedencegroup DCQRCodePrecedence {
+	associativity: left
+	higherThan: AdditionPrecedence
+	lowerThan: MultiplicationPrecedence
+}
 
 func >>>(firstFilter: @escaping Filter, secondFilter: @escaping Filter) -> Filter {
   return { image in
