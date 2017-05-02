@@ -37,7 +37,7 @@ final class DCQRCode {
   /**
     The main color of QRCode, default is __Black__
    */
-  var color = UIColor.black
+  // var color = UIColor.black
   
   /**
     Blend an image into the QRCode. The image will scale and fill the QRCode

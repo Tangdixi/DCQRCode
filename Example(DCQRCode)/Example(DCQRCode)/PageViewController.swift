@@ -27,7 +27,7 @@ class PageViewController: UIViewController {
    
     let toastQRCode = DCQRCode(info: "https://github.com/Tangdixi/DCQRCode", size: CGSize(width: 180, height: 180))
     toastQRCode.backgroundColor = UIColor.clear
-    toastQRCode.color = UIColor.init(red: 219/255, green: 127/255, blue: 60/255, alpha: 0.8)
+    toastQRCode.topColor = UIColor.init(red: 219/255, green: 127/255, blue: 60/255, alpha: 0.8)
     toastQRCode.centerImage = UIImage(named: "Avatar")
     toastQRCodeImageView.image = toastQRCode.image()
     
@@ -36,7 +36,7 @@ class PageViewController: UIViewController {
       (UIImage(named: "CatLeft")!, DCQRCodePosition.topLeft),
       (UIImage(named: "CatRight")!, DCQRCodePosition.topRight),
     ]
-    catQRCode.color = UIColor.init(red: 90/255, green: 35/255, blue: 7/255, alpha: 1.0)
+    catQRCode.topColor = UIColor.init(red: 90/255, green: 35/255, blue: 7/255, alpha: 1.0)
     catQRCode.backgroundColor = UIColor.clear
     catQRCode.centerImage = UIImage(named: "Avatar")
     catQRCode.removeQuietZone = true
@@ -45,7 +45,7 @@ class PageViewController: UIViewController {
     let leafQRCode = DCQRCode(info: "https://github.com/Tangdixi/DCQRCode", size: CGSize(width: 180, height: 180))
     leafQRCode.backgroundColor = UIColor.clear
     leafQRCode.removeQuietZone = true
-    leafQRCode.color = UIColor.init(white: 0, alpha: 0.6)
+    leafQRCode.topColor = UIColor.init(white: 0, alpha: 0.6)
     leafQRCode.centerImage = UIImage(named: "Avatar")
     leafQRCodeImageView.image = leafQRCode.image()
     

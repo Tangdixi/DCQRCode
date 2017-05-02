@@ -45,7 +45,7 @@ extension ViewController {
         (UIImage(named: "OuterPosition")!, DCQRCodePosition.topLeft),
         (UIImage(named: "OuterPosition")!, DCQRCodePosition.bottomLeft)
       ]
-      qrcode.color = UIColor.init(red: 100/255, green: 145/255, blue: 193/255, alpha: 1)
+      qrcode.topColor = UIColor.init(red: 100/255, green: 145/255, blue: 193/255, alpha: 1)
       return qrcode
     case 4:
       
@@ -64,7 +64,7 @@ extension ViewController {
       qrcode.backgroundColor = UIColor.yellow
       return qrcode
     case 7:
-      qrcode.color = UIColor.brown
+      qrcode.topColor = UIColor.brown
       return qrcode
     case 8:
       qrcode.maskImage = UIImage(named: "Top")
