@@ -10,72 +10,72 @@ import Foundation
 import CoreImage
 import UIKit
 
-typealias Filter = (CIImage -> CIImage)
+typealias Filter = ((CIImage) -> CIImage)
 
 infix operator >>> { associativity left }
 
-func >>>(firstFilter:Filter, secondFilter:Filter) -> Filter {
+func >>>(firstFilter: @escaping Filter, secondFilter: @escaping Filter) -> Filter {
   return { image in
     secondFilter(firstFilter(image))
   }
 }
 
-func generateQRCodeFilter(info:String) -> Filter {
+func generateQRCodeFilter(_ info:String) -> Filter {
   return { _ in
     // Guard no illegal characters
-    guard let data = info.dataUsingEncoding(NSISOLatin1StringEncoding) else { fatalError() }
-    let parameters = ["inputMessage": data, "inputCorrectionLevel": "H"]
+    guard let data = info.data(using: String.Encoding.isoLatin1) else { fatalError() }
+    let parameters = ["inputMessage": data, "inputCorrectionLevel": "H"] as [String : Any]
     guard let filter = CIFilter(name: "CIQRCodeGenerator", withInputParameters: parameters) else { fatalError() }
     guard let outputImage = filter.outputImage else { fatalError() }
     return outputImage
   }
 }
 
-func cropFilter(cropRect:CGRect) -> Filter {
+func cropFilter(_ cropRect:CGRect) -> Filter {
   return { image in
     
-    let croppedImage = image.imageByCroppingToRect(cropRect)
+    let croppedImage = image.cropping(to: cropRect)
     return croppedImage
     
   }
 }
 
-func bitmapResizeFilter(desireSize:CGSize) -> Filter {
+func bitmapResizeFilter(_ desireSize:CGSize) -> Filter {
   return { image in
 	
-     let extent = CGRectIntegral(image.extent)
-     let scale = min(desireSize.width/CGRectGetWidth(extent), desireSize.height/CGRectGetHeight(extent))
+     let extent = image.extent.integral
+     let scale = min(desireSize.width/extent.width, desireSize.height/extent.height)
      
-     let width = Int(CGRectGetWidth(extent)*scale)
-     let height = Int(CGRectGetHeight(extent)*scale)
+     let width = Int(extent.width*scale)
+     let height = Int(extent.height*scale)
      let colorSpace = CGColorSpaceCreateDeviceRGB()
-     let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue)
-     let bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, bitmapInfo.rawValue)
+     let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+     let bitmapRef = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
      
      let context = CIContext()
-     let bitmapImage = context.createCGImage(image, fromRect: extent)
-     CGContextSetInterpolationQuality(bitmapRef, .None)
-     CGContextScaleCTM(bitmapRef, scale, scale)
-     CGContextDrawImage(bitmapRef, extent, bitmapImage)
-     guard let scaledImageRef = CGBitmapContextCreateImage(bitmapRef) else { fatalError() }
-     let scaledImage = CIImage(CGImage: scaledImageRef)
+     let bitmapImage = context.createCGImage(image, from: extent)
+     bitmapRef?.interpolationQuality = .none
+     bitmapRef?.scaleBy(x: scale, y: scale)
+     bitmapRef?.draw(bitmapImage!, in: extent)
+     guard let scaledImageRef = bitmapRef?.makeImage() else { fatalError() }
+     let scaledImage = CIImage(cgImage: scaledImageRef)
      
      return scaledImage
 
   }
 }
 
-func resizeFilter(desireSize:CGSize) -> Filter {
+func resizeFilter(_ desireSize:CGSize) -> Filter {
   return { image in
     
     let scaleRatio = desireSize.width/image.extent.width
-    let scaledImage = image.imageByApplyingTransform(CGAffineTransformMakeScale(scaleRatio, scaleRatio))
+    let scaledImage = image.applying(CGAffineTransform(scaleX: scaleRatio, y: scaleRatio))
     
     return scaledImage
   }
 }
 
-func falseColorFilter(color0:UIColor, color1:UIColor) -> Filter {
+func falseColorFilter(_ color0:UIColor, color1:UIColor) -> Filter {
   return { image in
     let ciColor0 = CIColor(color:color0)
     let ciColor1 = CIColor(color:color1)
@@ -95,7 +95,7 @@ func maskToAlphaFilter() -> Filter {
   }
 }
 
-func blendWithAlphaMaskFilter(backgroundImage:CIImage, maskImage:CIImage) -> Filter {
+func blendWithAlphaMaskFilter(_ backgroundImage:CIImage, maskImage:CIImage) -> Filter {
   return { image in
     let parameters = ["inputImage": image, "inputBackgroundImage": backgroundImage, "inputMaskImage": maskImage]
     guard let filter = CIFilter(name: "CIBlendWithAlphaMask", withInputParameters: parameters) else { fatalError() }
@@ -104,17 +104,17 @@ func blendWithAlphaMaskFilter(backgroundImage:CIImage, maskImage:CIImage) -> Fil
   }
 }
 
-func affineTileFilter(transform:NSValue, corpRect:CGRect) -> Filter {
+func affineTileFilter(_ transform:NSValue, corpRect:CGRect) -> Filter {
   return { image in
     let parameters = ["inputImage": image, "inputTransform": transform]
     guard let filter = CIFilter(name: "CIAffineTile", withInputParameters: parameters) else { fatalError() }
     guard var outputImage = filter.outputImage else { fatalError() }
-    outputImage = outputImage.imageByCroppingToRect(corpRect)
+    outputImage = outputImage.cropping(to: corpRect)
     return outputImage
   }
 }
 
-func colorBlendModeFilter(backgroundImage:CIImage) -> Filter {
+func colorBlendModeFilter(_ backgroundImage:CIImage) -> Filter {
   return { image in
     let parameters = ["inputImage": image, "inputBackgroundImage": backgroundImage]
     guard let filter = CIFilter(name: "CIColorBlendMode", withInputParameters: parameters) else { fatalError() }
@@ -123,7 +123,7 @@ func colorBlendModeFilter(backgroundImage:CIImage) -> Filter {
   }
 }
 
-func constantColorGenerateFilter(color:CIColor) -> Filter {
+func constantColorGenerateFilter(_ color:CIColor) -> Filter {
   return { _ in
     let parameters = ["inputColor": color]
     guard let filter = CIFilter(name: "CIConstantColorGenerator", withInputParameters: parameters) else { fatalError() }

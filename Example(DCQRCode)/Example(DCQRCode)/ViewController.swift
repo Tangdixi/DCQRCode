@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 
 extension ViewController {
   
-  func qrcodeConfiguration(indexPath:NSIndexPath) -> DCQRCode {
+  func qrcodeConfiguration(_ indexPath:IndexPath) -> DCQRCode {
     
     let qrcode = DCQRCode(info: "https://github.com/Tangdixi/DCQRCode", size: CGSize(width: 300, height: 300))
     
@@ -34,26 +34,26 @@ extension ViewController {
     case 0:
       return qrcode
     case 1:
-      qrcode.positionOuterColor = UIColor.brownColor()
+      qrcode.positionOuterColor = UIColor.brown
       return qrcode
     case 2:
-      qrcode.positionInnerColor = UIColor.redColor()
+      qrcode.positionInnerColor = UIColor.red
       return qrcode
     case 3:
       qrcode.positionStyle = [
-        (UIImage(named: "OuterPosition")!, DCQRCodePosition.TopRight),
-        (UIImage(named: "OuterPosition")!, DCQRCodePosition.TopLeft),
-        (UIImage(named: "OuterPosition")!, DCQRCodePosition.BottomLeft)
+        (UIImage(named: "OuterPosition")!, DCQRCodePosition.topRight),
+        (UIImage(named: "OuterPosition")!, DCQRCodePosition.topLeft),
+        (UIImage(named: "OuterPosition")!, DCQRCodePosition.bottomLeft)
       ]
       qrcode.color = UIColor.init(red: 100/255, green: 145/255, blue: 193/255, alpha: 1)
       return qrcode
     case 4:
       
-      qrcode.positionOuterColor = UIColor.brownColor()
+      qrcode.positionOuterColor = UIColor.brown
       qrcode.positionInnerStyle = [
-        (UIImage(named: "Polygon")!, DCQRCodePosition.TopLeft),
-        (UIImage(named: "Polygon")!, DCQRCodePosition.TopRight),
-        (UIImage(named: "Polygon")!, DCQRCodePosition.BottomLeft)
+        (UIImage(named: "Polygon")!, DCQRCodePosition.topLeft),
+        (UIImage(named: "Polygon")!, DCQRCodePosition.topRight),
+        (UIImage(named: "Polygon")!, DCQRCodePosition.bottomLeft)
       ]
       
       return qrcode
@@ -61,10 +61,10 @@ extension ViewController {
       qrcode.centerImage = UIImage(named: "Avatar")
       return qrcode
     case 6:
-      qrcode.backgroundColor = UIColor.yellowColor()
+      qrcode.backgroundColor = UIColor.yellow
       return qrcode
     case 7:
-      qrcode.color = UIColor.brownColor()
+      qrcode.color = UIColor.brown
       return qrcode
     case 8:
       qrcode.maskImage = UIImage(named: "Top")
@@ -79,13 +79,13 @@ extension ViewController {
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
   
-  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
      return dataSource.count
   }
   
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-    let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
     
     cell.textLabel?.text = dataSource[indexPath.row]
     
@@ -93,18 +93,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
   }
   
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
     /* Enter Example */
     if indexPath.row == dataSource.count - 1 {
       
-      guard let controller = self.storyboard?.instantiateViewControllerWithIdentifier("pageViewController") else { fatalError() }
+      guard let controller = self.storyboard?.instantiateViewController(withIdentifier: "pageViewController") else { fatalError() }
       self.navigationController?.pushViewController(controller, animated: true)
       
       return
     }
     
-    guard let controller = self.storyboard?.instantiateViewControllerWithIdentifier("qrcodeViewController") as? QRCodeViewController else { fatalError() }
+    guard let controller = self.storyboard?.instantiateViewController(withIdentifier: "qrcodeViewController") as? QRCodeViewController else { fatalError() }
     
     controller.qrcode = self.qrcodeConfiguration(indexPath)
     
@@ -112,9 +112,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
   }
   
-  func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+  func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
     
-    return UIView(frame: CGRectZero)
+    return UIView(frame: CGRect.zero)
     
   }
   

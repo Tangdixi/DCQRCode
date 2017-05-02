@@ -13,13 +13,16 @@ import UIKit
 
 final class DCQRCode {
   
-  private lazy var version:Int = self.fetchQRCodeVersion()
-  private var info:String
-  private var size:CGSize
+  fileprivate lazy var version:Int = self.fetchQRCodeVersion()
+  fileprivate var info:String
+  fileprivate var size:CGSize
   
+    var bottomColor = UIColor.white
+    var topColor = UIColor.black
+    
   /* Temporarily disable these two property */
-  private var bottomImage:UIImage?
-  private var quietZoneColor:UIColor = UIColor.whiteColor()
+  fileprivate var bottomImage:UIImage?
+  fileprivate var quietZoneColor:UIColor = UIColor.white
   
   /**
     Remove the QRCode Quiet Zone, default is __false__
@@ -29,12 +32,12 @@ final class DCQRCode {
   /**
     The QRCode's background color, default is __White__
    */
-  var backgroundColor = UIColor.whiteColor()
+  var backgroundColor = UIColor.white
   
   /**
     The main color of QRCode, default is __Black__
    */
-  var color = UIColor.blackColor()
+  var color = UIColor.black
   
   /**
     Blend an image into the QRCode. The image will scale and fill the QRCode
@@ -75,7 +78,7 @@ final class DCQRCode {
    */
   init(info:String, size:CGSize) {
     self.info = info
-    self.size = size.scale(UIScreen.mainScreen().scale)
+    self.size = size.scale(UIScreen.main.scale)
   }
   
   /**
@@ -85,8 +88,11 @@ final class DCQRCode {
   func image() -> UIImage {
     
     /* Start from a white blank image */
-    let originImage = CIImage.emptyImage()
-    var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(color, color1: backgroundColor)
+    let originImage = CIImage.empty()
+    //    var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(topColor, color1: bottomColor)
+    var filter = generateQRCodeFilter(self.info)
+    filter = filter >>> resizeFilter(self.size)
+    filter = filter >>> falseColorFilter(topColor, color1: bottomColor)
     
     /* Processing through Core Image */
     if let maskImage = self.maskImage {
@@ -112,10 +118,10 @@ final class DCQRCode {
     }
     
     let ciImage = filter(originImage)
-    var image = UIImage(CIImage: ciImage)
+    var image = UIImage(ciImage: ciImage)
     
     UIGraphicsBeginImageContextWithOptions(image.size, false, 0)
-    image.drawInRect(CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+    image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
 
     defer {
       
@@ -125,35 +131,35 @@ final class DCQRCode {
     
     if let centerImage = self.centerImage {
       
-      changePositionInnerColor(centerImage, position: .Center)
+      changePositionInnerColor(centerImage, position: .center)
       
-      image = UIGraphicsGetImageFromCurrentImageContext()
-      
-    }
-    
-    if let positionOuterColor = self.positionOuterColor where self.positionStyle == nil {
-      
-      changeOuterPositionColor(positionOuterColor, position: .BottomLeft)
-      changeOuterPositionColor(positionOuterColor, position: .TopLeft)
-      changeOuterPositionColor(positionOuterColor, position: .TopRight)
-      
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = UIGraphicsGetImageFromCurrentImageContext()!
       
     }
     
-    if let positionInnerColor = self.positionInnerColor where self.positionInnerStyle == nil {
+    if let positionOuterColor = self.positionOuterColor, self.positionStyle == nil {
       
-      let originColorImage = CIImage.emptyImage()
+      changeOuterPositionColor(positionOuterColor, position: .bottomLeft)
+      changeOuterPositionColor(positionOuterColor, position: .topLeft)
+      changeOuterPositionColor(positionOuterColor, position: .topRight)
+      
+      image = UIGraphicsGetImageFromCurrentImageContext()!
+      
+    }
+    
+    if let positionInnerColor = self.positionInnerColor, self.positionInnerStyle == nil {
+      
+      let originColorImage = CIImage.empty()
       let color = CIColor(color: positionInnerColor)
-      let filter = constantColorGenerateFilter(color) >>> cropFilter(CGRectMake(0, 0, 2, 2))
+      let filter = constantColorGenerateFilter(color) >>> cropFilter(CGRect(x: 0, y: 0, width: 2, height: 2))
       let ciColorImage = filter(originColorImage)
-      let colorImage = UIImage(CIImage: ciColorImage)
+      let colorImage = UIImage(ciImage: ciColorImage)
       
-      changePositionInnerColor(colorImage, position: .TopLeft)
-      changePositionInnerColor(colorImage, position: .TopRight)
-      changePositionInnerColor(colorImage, position: .BottomLeft)
+      changePositionInnerColor(colorImage, position: .topLeft)
+      changePositionInnerColor(colorImage, position: .topRight)
+      changePositionInnerColor(colorImage, position: .bottomLeft)
       
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = UIGraphicsGetImageFromCurrentImageContext()!
       
     }
     
@@ -164,7 +170,7 @@ final class DCQRCode {
       positionStyle.forEach {
         changeOuterPositionStyle($0, position: $1)
       }
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = UIGraphicsGetImageFromCurrentImageContext()!
       
     }
     
@@ -175,25 +181,25 @@ final class DCQRCode {
       positionInnerStyle.forEach {
         changePositionInnerColor($0, position: $1)
       }
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = UIGraphicsGetImageFromCurrentImageContext()!
       
     }
     
     /* Make sure the QRCode's quiet zone clear */
     
-    if self.backgroundColor != UIColor.whiteColor() {
+    if self.backgroundColor != UIColor.white {
       
-      changeOuterPositionColor(self.backgroundColor, position: .QuietZone)
+      changeOuterPositionColor(self.backgroundColor, position: .quietZone)
       
-      image = UIGraphicsGetImageFromCurrentImageContext()
+      image = UIGraphicsGetImageFromCurrentImageContext()!
       
     }
     
     if self.removeQuietZone == true {
       
       let quietZoneWidth = self.size.width / CGFloat((version - 1) * 4 + 23)
-      var rect = CGRect(origin: CGPointZero, size: self.size)
-      rect = CGRectInset(rect, quietZoneWidth, quietZoneWidth)
+      var rect = CGRect(origin: CGPoint.zero, size: self.size)
+      rect = rect.insetBy(dx: quietZoneWidth, dy: quietZoneWidth)
       
       image = image.cropByRect(rect)
       
@@ -208,10 +214,10 @@ final class DCQRCode {
 
 extension DCQRCode {
   
-  private func fetchQRCodeVersion() -> Int {
+  fileprivate func fetchQRCodeVersion() -> Int {
     
     /* Fetch the qrcode version */
-    let originImage = CIImage.emptyImage()
+    let originImage = CIImage.empty()
     let filter = generateQRCodeFilter(self.info)
     let width = Int(filter(originImage).extent.width)
     
@@ -219,25 +225,33 @@ extension DCQRCode {
     
   }
   
-  private func generateAlphaQRCode() -> CIImage {
+  fileprivate func generateAlphaQRCode() -> CIImage {
     
-    let originImage = CIImage.emptyImage()
-    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.blackColor(), color1: UIColor.whiteColor()) >>> maskToAlphaFilter()
+    let originImage = CIImage.empty()
+//    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.black, color1: UIColor.white) >>> maskToAlphaFilter()
+    var filter = generateQRCodeFilter(self.info)
+    filter = filter >>> resizeFilter(self.size)
+    filter = filter >>> falseColorFilter(UIColor.white, color1: UIColor.black)
+    filter = filter >>> maskToAlphaFilter()
     let image = filter(originImage)
     return image
     
   }
   
-  private func generateReverseAlphaQRCode() -> CIImage {
+  fileprivate func generateReverseAlphaQRCode() -> CIImage {
     
-    let originImage = CIImage.emptyImage()
-    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.whiteColor(), color1: UIColor.blackColor()) >>> maskToAlphaFilter()
+    let originImage = CIImage.empty()
+//    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.white, color1: UIColor.black) >>> maskToAlphaFilter()
+    var filter = generateQRCodeFilter(self.info)
+    filter = filter >>> resizeFilter(self.size)
+    filter = filter >>> falseColorFilter(UIColor.white, color1: UIColor.black)
+    filter = filter >>> maskToAlphaFilter()
     let image = filter(originImage)
     return image
     
   }
   
-  private func changeOuterPositionColor(color:UIColor, position:DCQRCodePosition) {
+  fileprivate func changeOuterPositionColor(_ color:UIColor, position:DCQRCodePosition) {
     
     let path = position.outerPositionPath(self.size, version: self.version)
     color.setStroke()
@@ -245,22 +259,22 @@ extension DCQRCode {
     
   }
   
-  private func changeOuterPositionStyle(image:UIImage, position:DCQRCodePosition) {
+  fileprivate func changeOuterPositionStyle(_ image:UIImage, position:DCQRCodePosition) {
     
     let rect = position.outerPositionRect(self.size, version: self.version)
     
-    image.drawInRect(rect)
+    image.draw(in: rect)
     
   }
   
-  private func changePositionInnerColor(image:UIImage, position:DCQRCodePosition) {
+  fileprivate func changePositionInnerColor(_ image:UIImage, position:DCQRCodePosition) {
     
     let rect = position.innerPositionRect(self.size, version: self.version)
-    image.drawInRect(rect)
+    image.draw(in: rect)
     
   }
   
-  private func clearOuterPosition(positionStyle:[(UIImage, DCQRCodePosition)]) {
+  fileprivate func clearOuterPosition(_ positionStyle:[(UIImage, DCQRCodePosition)]) {
     
     guard let context = UIGraphicsGetCurrentContext() else { fatalError() }
     
@@ -268,16 +282,16 @@ extension DCQRCode {
       
       let rect = $1.outerPositionRect(self.size, version: self.version)
       
-      CGContextAddRect(context, rect)
+      context.addRect(rect)
       
     }
   
-    CGContextClip(context)
-    CGContextClearRect(context, CGRectMake(0, 0, self.size.width, self.size.height))
+    context.clip()
+    context.clear(CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
 
   }
   
-  private func clearInnerPosition(positionInnerStyle:[(UIImage, DCQRCodePosition)]) {
+  fileprivate func clearInnerPosition(_ positionInnerStyle:[(UIImage, DCQRCodePosition)]) {
     
     guard let context = UIGraphicsGetCurrentContext() else { fatalError() }
     
@@ -285,12 +299,12 @@ extension DCQRCode {
       
       let rect = $1.innerPositionRect(self.size, version: self.version)
       
-      CGContextAddRect(context, rect)
+      context.addRect(rect)
       
     }
     
-    CGContextClip(context)
-    CGContextClearRect(context, CGRectMake(0, 0, self.size.width, self.size.height))
+    context.clip()
+    context.clear(CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
     
   }
 }
@@ -303,85 +317,85 @@ enum DCQRCodePosition {
   static let outerPositionPathOriginLength = CGFloat(6)
   static let outerPositionTileOriginWidth = CGFloat(7)
   
-  case TopLeft, TopRight, BottomLeft, Center, QuietZone
+  case topLeft, topRight, bottomLeft, center, quietZone
   
-  func innerPositionRect(size:CGSize, version:Int) -> CGRect {
+  func innerPositionRect(_ size:CGSize, version:Int) -> CGRect {
     
     let leftMargin = size.width * 3 / CGFloat((version - 1) * 4 + 23)
     let tileWidth = leftMargin
     let centerImageWith = size.width * 7 / CGFloat((version - 1) * 4 + 23)
     
     var rect = CGRect(origin: CGPoint(x: leftMargin, y: leftMargin), size: CGSize(width: leftMargin, height: leftMargin))
-    rect = CGRectIntegral(rect)
-    rect = CGRectInset(rect, -1, -1)
+    rect = rect.integral
+    rect = rect.insetBy(dx: -1, dy: -1)
     
     switch self {
       
-      case .TopLeft:
+      case .topLeft:
         
         return rect
       
-      case .TopRight:
+      case .topRight:
         
         let offset = size.width - tileWidth - leftMargin*2
-        rect = CGRectOffset(rect, offset, 0)
+        rect = rect.offsetBy(dx: offset, dy: 0)
         return rect
       
-      case .BottomLeft:
+      case .bottomLeft:
         
         let offset = size.width - tileWidth - leftMargin*2
-        rect = CGRectOffset(rect, 0, offset)
+        rect = rect.offsetBy(dx: 0, dy: offset)
         return rect
       
-      case .Center:
+      case .center:
         
-        rect = CGRect(origin: CGPointZero, size: CGSize(width: centerImageWith , height: centerImageWith))
+        rect = CGRect(origin: CGPoint.zero, size: CGSize(width: centerImageWith , height: centerImageWith))
         let offset = size.width/2 - centerImageWith/2
-        rect = CGRectOffset(rect, offset, offset)
+        rect = rect.offsetBy(dx: offset, dy: offset)
         return rect
       
       default:
-        return CGRectZero
+        return CGRect.zero
     }
     
   }
   
-  func outerPositionRect(size:CGSize, version:Int) -> CGRect {
+  func outerPositionRect(_ size:CGSize, version:Int) -> CGRect {
     
     let zonePathWidth = size.width / CGFloat((version - 1) * 4 + 23)
     
     let outerPositionWidth = zonePathWidth * DCQRCodePosition.outerPositionTileOriginWidth
-    var rect = CGRect(origin: CGPointMake(zonePathWidth, zonePathWidth), size: CGSize(width: outerPositionWidth, height: outerPositionWidth))
+    var rect = CGRect(origin: CGPoint(x: zonePathWidth, y: zonePathWidth), size: CGSize(width: outerPositionWidth, height: outerPositionWidth))
 
-    rect = CGRectIntegral(rect)
-    rect = CGRectInset(rect, -1, -1)
+    rect = rect.integral
+    rect = rect.insetBy(dx: -1, dy: -1)
     
     switch self {
-    case .TopLeft:
+    case .topLeft:
       
       return rect
       
-    case .TopRight:
+    case .topRight:
       
       let offset = size.width - outerPositionWidth - zonePathWidth*2
-      rect = CGRectOffset(rect, offset, 0)
+      rect = rect.offsetBy(dx: offset, dy: 0)
       return rect
       
-    case .BottomLeft:
+    case .bottomLeft:
       
       let offset = size.width - outerPositionWidth - zonePathWidth*2
-      rect = CGRectOffset(rect, 0, offset)
+      rect = rect.offsetBy(dx: 0, dy: offset)
       return rect
 
     default:
       
-      return CGRectZero
+      return CGRect.zero
       
     }
     
   }
   
-  func outerPositionPath(size:CGSize, version:Int) -> UIBezierPath {
+  func outerPositionPath(_ size:CGSize, version:Int) -> UIBezierPath {
     
     let zonePathWidth = size.width / CGFloat((version - 1) * 4 + 23)
     let positionFrameWidth = zonePathWidth * DCQRCodePosition.outerPositionPathOriginLength
@@ -390,42 +404,42 @@ enum DCQRCodePosition {
     var rect = CGRect(origin: topLeftPoint, size: CGSize(width: positionFrameWidth, height: positionFrameWidth))
     
     /* Make sure the frame will  */
-    rect = CGRectIntegral(rect)
-    rect = CGRectInset(rect, 1, 1)
+    rect = rect.integral
+    rect = rect.insetBy(dx: 1, dy: 1)
     
     switch self {
-      case .TopLeft:
+      case .topLeft:
         
         let path = rect.rectPath()
         path.lineWidth = zonePathWidth + 3
-        path.lineCapStyle = .Square
+        path.lineCapStyle = .square
         
         return path
       
-      case .TopRight:
+      case .topRight:
         
         let offset = size.width - positionFrameWidth - topLeftPoint.x * 2
-        rect = CGRectOffset(rect, offset, 0)
+        rect = rect.offsetBy(dx: offset, dy: 0)
         let path = rect.rectPath()
         path.lineWidth = zonePathWidth + 3
-        path.lineCapStyle = .Square
+        path.lineCapStyle = .square
         
         return path
-      case .BottomLeft:
+      case .bottomLeft:
         
         let offset = size.width - positionFrameWidth - topLeftPoint.x * 2
-        rect = CGRectOffset(rect, 0, offset)
+        rect = rect.offsetBy(dx: 0, dy: offset)
         let path = rect.rectPath()
         path.lineWidth = zonePathWidth + 3
-        path.lineCapStyle = .Square
+        path.lineCapStyle = .square
         
         return path
-      case .QuietZone:
+      case .quietZone:
       
-        let zoneRect = CGRect(origin: CGPoint(x: zonePathWidth*0.5, y: zonePathWidth*0.5) , size: CGSizeMake(size.width - zonePathWidth, size.width - zonePathWidth))
+        let zoneRect = CGRect(origin: CGPoint(x: zonePathWidth*0.5, y: zonePathWidth*0.5) , size: CGSize(width: size.width - zonePathWidth, height: size.width - zonePathWidth))
         let zonePath = zoneRect.rectPath()
-        zonePath.lineWidth = zonePathWidth + UIScreen.mainScreen().scale
-        zonePath.lineCapStyle = .Square
+        zonePath.lineWidth = zonePathWidth + UIScreen.main.scale
+        zonePath.lineCapStyle = .square
       
         return zonePath
       default:
@@ -442,7 +456,7 @@ enum DCQRCodePosition {
 
 extension CGSize {
   
-  func scale(ratio: CGFloat) -> CGSize {
+  func scale(_ ratio: CGFloat) -> CGSize {
     
     return CGSize(width: self.width * ratio, height: self.height * ratio)
     
@@ -456,11 +470,11 @@ extension CGRect {
     
     let path = UIBezierPath()
     
-    path.moveToPoint(self.origin)
-    path.addLineToPoint(CGPoint(x: self.origin.x, y: self.origin.y + self.size.height))
-    path.addLineToPoint(CGPoint(x: self.origin.x + self.size.width, y: self.origin.y + self.size.height))
-    path.addLineToPoint(CGPoint(x: self.origin.x + self.size.width, y: self.origin.y))
-    path.addLineToPoint(self.origin)
+    path.move(to: self.origin)
+    path.addLine(to: CGPoint(x: self.origin.x, y: self.origin.y + self.size.height))
+    path.addLine(to: CGPoint(x: self.origin.x + self.size.width, y: self.origin.y + self.size.height))
+    path.addLine(to: CGPoint(x: self.origin.x + self.size.width, y: self.origin.y))
+    path.addLine(to: self.origin)
     
     return path
     
@@ -470,11 +484,11 @@ extension CGRect {
 
 extension UIImage {
   
-  func cropByRect(rect:CGRect) -> UIImage {
+  func cropByRect(_ rect:CGRect) -> UIImage {
     
-    let scaleRect = CGRectMake(rect.origin.x * self.scale, rect.origin.x * self.scale, rect.size.width * self.scale, rect.size.height * self.scale)
-    guard let imageRef = CGImageCreateWithImageInRect(self.CGImage, scaleRect) else { fatalError() }
-    let image = UIImage(CGImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
+    let scaleRect = CGRect(x: rect.origin.x * self.scale, y: rect.origin.x * self.scale, width: rect.size.width * self.scale, height: rect.size.height * self.scale)
+    guard let imageRef = self.cgImage?.cropping(to: scaleRect) else { fatalError() }
+    let image = UIImage(cgImage: imageRef, scale: self.scale, orientation: self.imageOrientation)
     
     return image
   }
