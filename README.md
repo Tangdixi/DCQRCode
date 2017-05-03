@@ -1,6 +1,7 @@
 # DCQRCode
 
 [![Build Status](https://travis-ci.org/Tangdixi/DCQRCode.svg?branch=2.0)](https://travis-ci.org/Tangdixi/DCQRCode)
+[![Build Status](https://img.shields.io/badge/pod-2.0.1-orange.svg)](https://img.shields.io/badge/pod-2.0.1-orange.svg)
 
 ![ColorFrame](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/ColorFrame.png)
 ![Cat](https://raw.githubusercontent.com/Tangdixi/DCQRCode/2.0/Assets/Cat.png)
@@ -22,7 +23,7 @@ Well, it is strongly recommended that you install via [**CocoaPods**](https://co
 
 ### CocoaPods
 ```bash
-pod 'DCQRCode', '~> 2.0'
+pod 'DCQRCode', '~> 2.0.1'
 ```
 
 ## Usage
