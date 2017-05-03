@@ -15,7 +15,8 @@
   },
   "source": {
     "git": "https://github.com/Tangdixi/DCQRCode.git",
-    "tag": "2.0.1"
+    "tag": "2.0.1",
+    "branch": "master"
   },
   "source_files": "Source/*.swift",
   "requires_arc": true

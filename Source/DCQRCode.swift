@@ -37,7 +37,7 @@ final class DCQRCode {
   /**
     The main color of QRCode, default is __Black__
    */
-  var color = UIColor.black
+  // var color = UIColor.black
   
   /**
     Blend an image into the QRCode. The image will scale and fill the QRCode
@@ -89,10 +89,7 @@ final class DCQRCode {
     
     /* Start from a white blank image */
     let originImage = CIImage.empty()
-    //    var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(topColor, color1: bottomColor)
-    var filter = generateQRCodeFilter(self.info)
-    filter = filter >>> resizeFilter(self.size)
-    filter = filter >>> falseColorFilter(topColor, color1: bottomColor)
+		var filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(topColor, color1: bottomColor)
     
     /* Processing through Core Image */
     if let maskImage = self.maskImage {
@@ -228,12 +225,8 @@ extension DCQRCode {
   fileprivate func generateAlphaQRCode() -> CIImage {
     
     let originImage = CIImage.empty()
-//    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.black, color1: UIColor.white) >>> maskToAlphaFilter()
-    var filter = generateQRCodeFilter(self.info)
-    filter = filter >>> resizeFilter(self.size)
-    filter = filter >>> falseColorFilter(UIColor.white, color1: UIColor.black)
-    filter = filter >>> maskToAlphaFilter()
-    let image = filter(originImage)
+    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.black, color1: UIColor.white) >>> maskToAlphaFilter()
+		let image = filter(originImage)
     return image
     
   }
@@ -241,11 +234,7 @@ extension DCQRCode {
   fileprivate func generateReverseAlphaQRCode() -> CIImage {
     
     let originImage = CIImage.empty()
-//    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.white, color1: UIColor.black) >>> maskToAlphaFilter()
-    var filter = generateQRCodeFilter(self.info)
-    filter = filter >>> resizeFilter(self.size)
-    filter = filter >>> falseColorFilter(UIColor.white, color1: UIColor.black)
-    filter = filter >>> maskToAlphaFilter()
+    let filter = generateQRCodeFilter(self.info) >>> resizeFilter(self.size) >>> falseColorFilter(UIColor.white, color1: UIColor.black) >>> maskToAlphaFilter()
     let image = filter(originImage)
     return image
     
