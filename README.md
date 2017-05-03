@@ -1,4 +1,4 @@
-#DCQRCode
+# DCQRCode
 
 [![Build Status](https://travis-ci.org/Tangdixi/DCQRCode.svg?branch=2.0)](https://travis-ci.org/Tangdixi/DCQRCode)
 
@@ -15,17 +15,17 @@
 git clone git@github.com:Tangdixi/DCPathButton.git
 ``` 
 
-##Installation
+## Installation
 
 Drag the **Source** into your project.  
 Well, it is strongly recommended that you install via [**CocoaPods**](https://cocoapods.org) 
 
-###CocoaPods
+### CocoaPods
 ```bash
 pod 'DCQRCode', '~> 2.0'
 ```
 
-##Usage
+## Usage
 * Create a DCQRCode  
 ```swift
 let qrcode = DCQRCode(info: "https://github.com/Tangdixi/DCQRCode", size: CGSize(width: 300, height: 300))
@@ -42,19 +42,23 @@ let qrcodeImage = qrcode.image()
 
 More detail just head to the **Example Project**
 
-##Documentation
+## Documentation
 Support **quicklook** in **Xcode**  
 
-##Bug, Suggestions
+## Bug, Suggestions
 
 All you need is open an [issue](https://github.com/Tangdixi/DCQRCode/issues), I'll answer it ASAP !
 
-##TODO
+## TODO
 *  Allow reverse position color
 *  Generate pattern images as the QRCode mask
 *  Change QRCode style, like round rect
 
-##License
+## Contribution
+
+Thanks @[knightbat](https://github.com/knightbat)'s PR (Migration to Swift 3) !!!!
+
+## License
 
 **DCQRCode** is available under the MIT license. See the LICENSE file for more info.
 
